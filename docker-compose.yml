@@ -1,0 +1,33 @@
+version: '3.8'
+volumes:
+    real-time-chat-mongodb:
+
+services:
+  real-time-chat-frontend:
+    build:
+      context: ./clients
+    ports:
+      - "1090:1090"
+    container_name: real-time-chat-frontend
+    command: ["npm", "start"]
+
+  real-time-chat-backend:
+    build:
+      context: ./server
+    ports:
+      - "8000:8000"
+    container_name: real-time-chat-backend
+    volumes:
+      - ./server:/server
+    command: ["npm", "start"]
+
+
+  real-time-chat-mongodb:
+    image: mongo
+    restart: always
+    container_name: real-time-chat-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - real-time-chat-mongodb:/data/db
